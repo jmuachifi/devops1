@@ -7,22 +7,22 @@ phases:
       - echo Logging in to Amazon ECR....
       - aws --version
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 599223600991.dkr.ecr.us-east-1.amazonaws.com
-      - REPOSITORY_URI=599223600991.dkr.ecr.us-east-1.amazonaws.com/devops1
+      - REPOSITORY_URI=599223600991.dkr.ecr.us-east-1.amazonaws.com/devops2
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t devops1 .
-      - docker tag devops1:latest 599223600991.dkr.ecr.us-east-1.amazonaws.com/devops1:latest
+      - docker build -t devops2 .
+      - docker tag devops2:latest 599223600991.dkr.ecr.us-east-1.amazonaws.com/devops2:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push 599223600991.dkr.ecr.us-east-1.amazonaws.com/devops1:latest
+      - docker push 599223600991.dkr.ecr.us-east-1.amazonaws.com/devops2:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"devops1","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - printf '[{"name":"devops2","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: 
